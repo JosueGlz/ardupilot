@@ -37,7 +37,7 @@ void userhook_SlowLoop()
 #endif
 
 #ifdef USERHOOK_SUPERSLOWLOOP
-#include "../libraries/AP_HAL_PX4/RCOutput_Navio.h"
+#include "../libraries/AP_HAL_Linux/RCOutput_Navio.h"
 #include <AP_HAL_Linux.h>
 uint16_t pwm = 2000;
 void userhook_SuperSlowLoop()
