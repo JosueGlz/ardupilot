@@ -39,11 +39,16 @@ void userhook_SlowLoop()
 #ifdef USERHOOK_SUPERSLOWLOOP
 #include "../libraries/AP_HAL_Linux/RCOutput_Navio.h"
 #include <AP_HAL_Linux.h>
-uint16_t pwm = 2000;
+uint16_t pwm = 20000;
+pwm=1000;
 void userhook_SuperSlowLoop()
 {
     uint8_t _channel=9;
-    pwm = 3000 - pwm;
+    if (pwm = 1000){
+    pwm = 2000;
+    } else {
+        pwm=1000;
+    }
     hal.rcout->enable_ch(_channel-1);
     hal.rcout->write(_channel-1, pwm);
 }
