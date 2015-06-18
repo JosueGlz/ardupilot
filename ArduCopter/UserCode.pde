@@ -37,8 +37,14 @@ void userhook_SlowLoop()
 #endif
 
 #ifdef USERHOOK_SUPERSLOWLOOP
+#include "../libraries/AP_HAL_PX4/RCOutput_Navio.h"
+#include <AP_HAL_Linux.h>
+uint16_t pwm = 2000;
 void userhook_SuperSlowLoop()
 {
-    // put your 1Hz code here
+    uint8_t _channel=9;
+    pwm = 3000 - pwm;
+    hal.rcout->enable_ch(_channel-1);
+    hal.rcout->write(_channel-1, pwm);
 }
 #endif
