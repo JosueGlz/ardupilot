@@ -46,6 +46,7 @@ void userhook_SuperSlowLoop()
 
     pwm = 2000-pwm;
     hal.rcout->enable_ch(_channel-1);
-    hal.rcout->write(_channel-1, (pwm)20000);
+    hal.rcout->set_freq(0xF, 50);
+    hal.rcout->write(_channel-1, pwm);
 }
 #endif
