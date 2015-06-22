@@ -50,16 +50,12 @@ void userhook_SuperSlowLoop()
     
     uint16_t rcin=hal.rcin->read(_channel_r-1);
     
-    if (rcin>1600) {
-        hal.rcout->set_freq(0x0F,490);
-        hal.console->printf(PWM at 490 Hz);
-    } else {
-        hal.rcout->set_freq(0x0F,50);
-        hal.console->printf(PWM at 50 Hz);
-    }
-
-    pwm = 2000-pwm;
-    hal.rcout->enable_ch(_channel-1);
-    hal.rcout->write(_channel-1, pwm);
+    pwm=rcin;
+    hal.rcout->set_freq(0x0F,490);
+    hal.console->printf("PWM at 490 Hz %u",pwm);
+    hal.rcout->enable_ch(_channel_w-1);
+    hal.rcout->write(_channel_w-1, pwm);
+    
+    
 }
 #endif
