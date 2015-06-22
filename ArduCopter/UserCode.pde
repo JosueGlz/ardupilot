@@ -16,9 +16,24 @@ void userhook_FastLoop()
 #endif
 
 #ifdef USERHOOK_50HZLOOP
+#include "../libraries/AP_HAL_Linux/RCOutput_Navio.h"
+#include <AP_HAL_Linux.h>
+#include <stdlib.h>
+#include <AP_HAL.h>
+#include <AP_Common.h>
+uint16_t pwm = 1500;
 void userhook_50Hz()
 {
-    // put your 50Hz code here
+    uint8_t _channel_w=9;
+    uint8_t _channel_r=7;
+    
+    uint16_t rcin=hal.rcin->read(_channel_r-1);
+    
+    pwm=rcin;
+    hal.rcout->set_freq(0x0F,490);
+    hal.console->printf("PWM at 490 Hz %u",pwm);
+    hal.rcout->enable_ch(_channel_w-1);
+    hal.rcout->write(_channel_w-1, pwm);
 }
 #endif
 
@@ -37,24 +52,10 @@ void userhook_SlowLoop()
 #endif
 
 #ifdef USERHOOK_SUPERSLOWLOOP
-#include "../libraries/AP_HAL_Linux/RCOutput_Navio.h"
-#include <AP_HAL_Linux.h>
-#include <stdlib.h>
-#include <AP_HAL.h>
-#include <AP_Common.h>
-uint16_t pwm = 1500;
+
 void userhook_SuperSlowLoop()
 {
-    uint8_t _channel_w=9;
-    uint8_t _channel_r=7;
-    
-    uint16_t rcin=hal.rcin->read(_channel_r-1);
-    
-    pwm=rcin;
-    hal.rcout->set_freq(0x0F,490);
-    hal.console->printf("PWM at 490 Hz %u",pwm);
-    hal.rcout->enable_ch(_channel_w-1);
-    hal.rcout->write(_channel_w-1, pwm);
+
     
     
 }
