@@ -21,9 +21,11 @@ void userhook_FastLoop()
 #include <stdlib.h>
 #include <AP_HAL.h>
 #include <AP_Common.h>
+#include <UARTDriver.h>
 uint16_t pwm = 1500;
 void userhook_50Hz()
 {
+    
     uint8_t _channel_w=9;
     uint8_t _channel_r=7;
     
@@ -31,9 +33,14 @@ void userhook_50Hz()
     
     pwm=rcin;
     hal.rcout->set_freq(0x0F,490);
-    hal.console->printf("PWM at 490 Hz %u",pwm);
+    hal.console->printf("PWM at 490 Hz %u \n",pwm);
     hal.rcout->enable_ch(_channel_w-1);
     hal.rcout->write(_channel_w-1, pwm);
+    
+    setup_uart(hal.uartD, "uartD");
+    uart->println("Hello on UART D\n");
+    
+    
 }
 #endif
 
