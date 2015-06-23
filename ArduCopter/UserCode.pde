@@ -37,7 +37,7 @@ void userhook_50Hz()
     hal.rcout->enable_ch(_channel_w-1);
     hal.rcout->write(_channel_w-1, pwm);
     
-    setup_uart(hal.uartD, "uartD");
+    uartD->begin(57600);
     uart->println("Hello on UART D\n");
     
     
