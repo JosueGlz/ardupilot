@@ -39,7 +39,8 @@ void userhook_50Hz()
     hal.rcout->enable_ch(_channel_w-1);
     hal.rcout->write(_channel_w-1, pwm);
     
-    hal.uartA->printf("Hello World!")
+    hal.uartA->begin(57600);
+    hal.uartA->printf("Hello World!");
     
     
 }
