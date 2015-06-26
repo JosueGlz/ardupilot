@@ -43,21 +43,17 @@ void userhook_50Hz()
     hal.rcout->write(_channel_w-1, pwm);
     
 
-    if (i==0){
-    snprintf(baro,32,"%i",baro_alt);
-    hal.scheduler->delay(1);
-    baro[31] = 0;
-    }
-    if(hal.uartC->available() > 0){
-    hal.uartC->printf("%c",baro[i]);
-    hal.scheduler->delay(1);
-    i++;
-    }
-    if ((i >= 31 || baro[i] == 0) && hal.uartC->available() > 0){
-    i=0;
-    hal.uartC->print("\n");
-    hal.scheduler->delay(1);
-    }
+if (i==0){
+snprintf(baro,16,"%i",baro_alt);
+baro[15] = 0;
+}
+hal.uartC->printf("%c",baro[i]);
+hal.scheduler->delay(1);
+i++;
+if (i >= 15 || baro[i] == 0){
+i=0;
+hal.uartC->print("\n");
+}
 
     hal.console->printf("contador %i \n",i);
     
