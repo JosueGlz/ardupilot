@@ -44,7 +44,7 @@ void userhook_50Hz()
     
 
     if (i==0){
-    snprintf(baro,32,"%li",baro_alt);
+    snprintf(baro,32,"%i",baro_alt);
     hal.scheduler->delay(1);
     baro[31] = 0;
     }
@@ -59,7 +59,7 @@ void userhook_50Hz()
     hal.scheduler->delay(1);
     }
 
-    hal.console->printf("contador %u \n",i);
+    hal.console->printf("contador %i \n",i);
     
 }
 #endif
