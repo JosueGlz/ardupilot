@@ -22,6 +22,7 @@ void userhook_FastLoop()
 #include <AP_Common.h>
 #include <AP_Scheduler.h>
 #include <UARTDriver.h>
+#include <AP_Baro.h>
 
 
 uint16_t pwm = 1500;
@@ -30,6 +31,7 @@ void userhook_50Hz()
     
     uint8_t _channel_w=9;
     uint8_t _channel_r=7;
+    static char baro[16];
     
     uint16_t rcin=hal.rcin->read(_channel_r-1);
     
@@ -39,8 +41,10 @@ void userhook_50Hz()
     hal.rcout->enable_ch(_channel_w-1);
     hal.rcout->write(_channel_w-1, pwm);
     
-    hal.uartA->begin(57600);
-    hal.uartA->printf("Hello World!");
+    snprintf(baro,16,"%li",baro_alt);
+    hal.uartC->printf("Altura %c",baro[16]);
+    hal.scheduler->delay(1);
+    hal.uartA->printf("Altitud %c",baro[16]);
     
     
 }
