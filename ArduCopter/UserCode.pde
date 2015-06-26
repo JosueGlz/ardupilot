@@ -31,21 +31,35 @@ void userhook_50Hz()
     
     uint8_t _channel_w=9;
     uint8_t _channel_r=7;
-    static char baro[16];
+    static int i;
+    static char baro[32];
     
     uint16_t rcin=hal.rcin->read(_channel_r-1);
     
     pwm=rcin;
     hal.rcout->set_freq(0x0F,490);
-    hal.console->printf("PWM at 490 Hz %u \n",pwm);
+    //hal.console->printf("PWM at 490 Hz %u \n",pwm);
     hal.rcout->enable_ch(_channel_w-1);
     hal.rcout->write(_channel_w-1, pwm);
     
-    snprintf(baro,16,"%li",baro_alt);
-    hal.uartC->printf("Altura %c",baro[16]);
+
+    if (i==0){
+    snprintf(baro,32,"%li",baro_alt);
     hal.scheduler->delay(1);
-    hal.uartA->printf("Altitud %c",baro[16]);
-    
+    baro[31] = 0;
+    }
+    if(hal.uartC->available() > 0){
+    hal.uartC->printf("%c",baro[i]);
+    hal.scheduler->delay(1);
+    i++;
+    }
+    if ((i >= 31 || baro[i] == 0) && hal.uartC->available() > 0){
+    i=0;
+    hal.uartC->print("\n");
+    hal.scheduler->delay(1);
+    }
+
+    hal.console->printf("contador %u \n",i);
     
 }
 #endif
