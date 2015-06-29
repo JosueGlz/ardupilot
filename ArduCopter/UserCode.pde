@@ -44,14 +44,14 @@ void userhook_50Hz()
     
 
 
-hal.uartA->printf("Hello world");
+hal.uartA->write("Hello world");
 hal.scheduler->delay(1);
-hal.uartA->printf("\n");
+hal.uartA->write("\n");
 hal.scheduler->delay(1);
-hal.uartE->begin(57600);
-hal.uartE->printf("%i",baro_alt);
+hal.uartC->begin(57600);
+hal.uartC->write("%i",baro_alt);
 hal.scheduler->delay(1);
-hal.uartE->print("\n");
+hal.uartC->write("\n");
 
 
     
