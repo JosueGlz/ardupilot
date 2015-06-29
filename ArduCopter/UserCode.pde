@@ -24,37 +24,24 @@ void userhook_FastLoop()
 #include <UARTDriver.h>
 #include <AP_Baro.h>
 
-
-uint16_t pwm = 1500;
 void userhook_50Hz()
 {
-    
-    uint8_t _channel_w=9;
-    uint8_t _channel_r=7;
-    static int i;
-    static char baro[32];
-    
-    uint16_t rcin=hal.rcin->read(_channel_r-1);
-    
-    pwm=rcin;
-    hal.rcout->set_freq(0x0F,490);
-    //hal.console->printf("PWM at 490 Hz %u \n",pwm);
-    hal.rcout->enable_ch(_channel_w-1);
-    hal.rcout->write(_channel_w-1, pwm);
-    
 
+static int i;
+static char baro[16];
 
-hal.uartA->write("Hello world");
+if (i==0){
+snprintf(baro,16,"%li",baro_alt);
+baro[15] = 0;
+}
+hal.uartC->printf("%c",baro[i]);
 hal.scheduler->delay(1);
-hal.uartA->write("\n");
-hal.scheduler->delay(1);
-hal.uartC->begin(57600);
-hal.uartC->write("%i",baro_alt);
-hal.scheduler->delay(1);
-hal.uartC->write("\n");
+i++;
+if (i >= 15 || baro[i] == 0){
+i=0;
+hal.uartC->print("\n");
+}
 
-
-    
 }
 #endif
 
