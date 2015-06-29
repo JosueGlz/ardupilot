@@ -90,6 +90,9 @@ char ch = 1
 static int posE;
 static char bufE[8];
 char chE = 1
+static int posA;
+static char bufA[8];
+char chA = 1
 
 ch = hal.uartC->read();
 buf[pos++] = ch;
@@ -98,11 +101,18 @@ pos = 0;
 hal.console->printf("C: %c",buf);
 }
 
-ch = hal.uartE->read();
+chE = hal.uartE->read();
 bufE[posE++] = chE;
 if(posE >= 7){
 posE = 0;
-hal.console->printf("E: %c",buf);
+hal.console->printf("E: %c",bufE);
+}
+
+chA = hal.uartA->read();
+bufA[posA++] = chA;
+if(posA >= 7){
+posA = 0;
+hal.console->printf("A: %c",bufA);
 }
     
 }
