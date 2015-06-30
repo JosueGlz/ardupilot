@@ -56,22 +56,17 @@ void userhook_SlowLoop()
 #endif
 
 #ifdef USERHOOK_SUPERSLOWLOOP
+#include <AP_HAL.h>
 #include <AP_HAL_Linux.h>
 #include <AP_Common.h>
 #include <AP_Scheduler.h>
 #include <UARTDriver.h>
-
-void userhook_SuperSlowLoop()
-{
-
 const AP_HAL::HAL& hal = AP_HAL_BOARD_DRIVER;
 
 static AP_HAL::UARTDriver* uarts[] = {
     hal.uartA, // console
 };
 #define NUM_UARTS (sizeof(uarts)/sizeof(uarts[0]))
-
-
 /*
   setup one UART at 57600
  */
@@ -107,8 +102,10 @@ static void test_uart(AP_HAL::UARTDriver *uart, const char *name)
                  name, hal.scheduler->millis()*0.001f);
 }
 
-void loop(void) 
-{	
+void userhook_SuperSlowLoop()
+
+{
+
     test_uart(hal.uartA, "uartA");
     test_uart(hal.uartB, "uartB");
     test_uart(hal.uartC, "uartC");
@@ -122,7 +119,6 @@ void loop(void)
 #endif
 
     hal.scheduler->delay(1000);
-}
 
 AP_HAL_MAIN();
 
