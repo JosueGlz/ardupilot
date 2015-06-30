@@ -80,17 +80,6 @@ static void setup_uart(AP_HAL::UARTDriver *uart, const char *name)
 }
 
 
-void setup(void) 
-{
-    /*
-      start all UARTs at 57600 with default buffer sizes
-     */
-    setup_uart(hal.uartA, "uartA"); // console
-    setup_uart(hal.uartB, "uartB"); // 1st GPS
-    setup_uart(hal.uartC, "uartC"); // telemetry 1
-    setup_uart(hal.uartD, "uartD"); // telemetry 2
-    setup_uart(hal.uartE, "uartE"); // 2nd GPS
-}
 
 static void test_uart(AP_HAL::UARTDriver *uart, const char *name)
 {
@@ -105,6 +94,17 @@ static void test_uart(AP_HAL::UARTDriver *uart, const char *name)
 void userhook_SuperSlowLoop()
 
 {
+
+
+    /*
+      start all UARTs at 57600 with default buffer sizes
+     */
+    setup_uart(hal.uartA, "uartA"); // console
+    setup_uart(hal.uartB, "uartB"); // 1st GPS
+    setup_uart(hal.uartC, "uartC"); // telemetry 1
+    setup_uart(hal.uartD, "uartD"); // telemetry 2
+    setup_uart(hal.uartE, "uartE"); // 2nd GPS
+
 
     test_uart(hal.uartA, "uartA");
     test_uart(hal.uartB, "uartB");
