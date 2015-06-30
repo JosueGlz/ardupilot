@@ -27,33 +27,15 @@ void userhook_FastLoop()
 void userhook_50Hz()
 {
 
-static int i;
-static char baro[16];
+static int pos;
+static char buf[8];
+char ch = 1
 
-if (i==0){
-snprintf(baro,16,"%li",baro_alt);
-baro[15] = 0;
-}
-hal.uartA->printf("%c",baro[i]);
-hal.console->printf("baro: %c",baro[i]);
-hal.scheduler->delay(1);
-hal.uartB->printf("%c",baro[i]);
-hal.scheduler->delay(1);
-hal.uartC->printf("%c",baro[i]);
-hal.scheduler->delay(1);
-hal.uartD->printf("%c",baro[i]);
-hal.scheduler->delay(1);
-hal.uartE->printf("%c",baro[i]);
-hal.scheduler->delay(1);
-i++;
-if (i >= 15 || baro[i] == 0){
-i=0;
-hal.uartA->print("\n");
-hal.uartB->print("\n");
-hal.uartC->print("\n");
-hal.uartD->print("\n");
-hal.uartE->print("\n");
-hal.console->print("\n");
+ch = hal.uartC->read();
+buf[pos++] = ch;
+if(pos >= 7){
+pos = 0;
+hal.console->printf("C: %c",buf);
 }
 
 }
@@ -74,46 +56,76 @@ void userhook_SlowLoop()
 #endif
 
 #ifdef USERHOOK_SUPERSLOWLOOP
-#include <AP_HAL.h>
 #include <AP_HAL_Linux.h>
 #include <AP_Common.h>
 #include <AP_Scheduler.h>
 #include <UARTDriver.h>
-#include <AP_Baro.h>
 
 void userhook_SuperSlowLoop()
 {
 
-static int pos;
-static char buf[8];
-char ch = 1
-static int posE;
-static char bufE[8];
-char chE = 1
-static int posA;
-static char bufA[8];
-char chA = 1
+const AP_HAL::HAL& hal = AP_HAL_BOARD_DRIVER;
 
-ch = hal.uartC->read();
-buf[pos++] = ch;
-if(pos >= 7){
-pos = 0;
-hal.console->printf("C: %c",buf);
+static AP_HAL::UARTDriver* uarts[] = {
+    hal.uartA, // console
+};
+#define NUM_UARTS (sizeof(uarts)/sizeof(uarts[0]))
+
+
+/*
+  setup one UART at 57600
+ */
+static void setup_uart(AP_HAL::UARTDriver *uart, const char *name)
+{
+    if (uart == NULL) {
+        // that UART doesn't exist on this platform
+        return;
+    }
+    uart->begin(57600);
 }
 
-chE = hal.uartE->read();
-bufE[posE++] = chE;
-if(posE >= 7){
-posE = 0;
-hal.console->printf("E: %c",bufE);
+
+void setup(void) 
+{
+    /*
+      start all UARTs at 57600 with default buffer sizes
+     */
+    setup_uart(hal.uartA, "uartA"); // console
+    setup_uart(hal.uartB, "uartB"); // 1st GPS
+    setup_uart(hal.uartC, "uartC"); // telemetry 1
+    setup_uart(hal.uartD, "uartD"); // telemetry 2
+    setup_uart(hal.uartE, "uartE"); // 2nd GPS
 }
 
-chA = hal.uartA->read();
-bufA[posA++] = chA;
-if(posA >= 7){
-posA = 0;
-hal.console->printf("A: %c",bufA);
+static void test_uart(AP_HAL::UARTDriver *uart, const char *name)
+{
+    if (uart == NULL) {
+        // that UART doesn't exist on this platform
+        return;
+    }
+    uart->printf("Hello on UART %s at %.3f seconds\n",
+                 name, hal.scheduler->millis()*0.001f);
 }
+
+void loop(void) 
+{	
+    test_uart(hal.uartA, "uartA");
+    test_uart(hal.uartB, "uartB");
+    test_uart(hal.uartC, "uartC");
+    test_uart(hal.uartD, "uartD");
+    test_uart(hal.uartE, "uartE");
+
+    // also do a raw printf() on some platforms, which prints to the
+    // debug console
+#if HAL_OS_POSIX_IO
+    ::printf("Hello on debug console at %.3f seconds\n", hal.scheduler->millis()*0.001f);
+#endif
+
+    hal.scheduler->delay(1000);
+}
+
+AP_HAL_MAIN();
+
     
 }
 #endif
