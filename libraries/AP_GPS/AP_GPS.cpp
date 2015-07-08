@@ -107,18 +107,19 @@ const prog_char AP_GPS::_initialisation_blob[] PROGMEM = UBLOX_SET_BINARY MTK_SE
   send some more initialisation string bytes if there is room in the
   UART transmit buffer
  */
-/*void AP_GPS::send_blob_start(uint8_t instance, const prog_char *_blob, uint16_t size)
-{
+void AP_GPS::send_blob_start(uint8_t instance, const prog_char *_blob, uint16_t size)
+{/*
     initblob_state[instance].blob = _blob;
     initblob_state[instance].remaining = size;
-}*/
+    */
+}
 
 /*
   send some more initialisation string bytes if there is room in the
   UART transmit buffer
  */
-/*void AP_GPS::send_blob_update(uint8_t instance)
-{
+void AP_GPS::send_blob_update(uint8_t instance)
+{/*
     // exit immediately if no uart for this instance
     if (_port[instance] == NULL) {
         return;
@@ -137,7 +138,8 @@ const prog_char AP_GPS::_initialisation_blob[] PROGMEM = UBLOX_SET_BINARY MTK_SE
             initblob_state[instance].remaining--;
         }
     }
-}*/
+    */
+}
 
 /*
   run detection step for one GPS instance. If this finds a GPS then it
