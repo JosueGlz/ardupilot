@@ -26,7 +26,7 @@ void userhook_FastLoop()
 
 void userhook_50Hz()
 {
-
+/*
 static int pos;
 static char buf[8];
 char ch = 1
@@ -37,7 +37,7 @@ if(pos >= 7){
 pos = 0;
 hal.console->printf("C: %c",buf);
 }
-
+*/
 }
 #endif
 
@@ -66,7 +66,7 @@ void userhook_SlowLoop()
 void userhook_SuperSlowLoop()
 
 {
-    
+    /*
 static AP_HAL::UARTDriver* uarts[] = {
     hal.uartA, // console
 };
@@ -76,6 +76,6 @@ static AP_HAL::UARTDriver* uarts[] = {
     uart->printf("Hello on UART A");
 
 
-    
+    */
 }
 #endif
